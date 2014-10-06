@@ -21,8 +21,8 @@ conn   <- src_postgres(dbname = config$db_name,
 ## Table import
 Sys.setlocale("LC_CTYPE", "C")
 
-############################################
-### fsp table ##############################
+##############################################################
+##################### fsp table ##############################
 import_tbl1  <- tbl(conn,"fsp_englishsub",fileEncoding="CP932")
 
 import_tbl1 %>%
@@ -38,13 +38,13 @@ dat$segment  <- iconv(dat$segment,from="utf-8",to="cp932")
 dat$flg      <- iconv(dat$flg,from="utf-8",to="cp932")
 
 ##
-write.csv(dat,"C:/R_dir/DAC/src/fundamentals/fsp_sample.csv")
-fsp <- read.csv("C:/R_dir/DAC/src/fundamentals/fsp_sample.csv")
+write.csv(dat,"C:/R_dir/DAC/data/fsp_sample.csv")
+fsp <- read.csv("C:/R_dir/DAC/data/fundamentals/fsp_sample.csv")
 fsp <- tbl_df(fsp)
 
 
-############################################
-### receipt table ##########################
+##############################################################
+##################### receipt table ##########################
 
 import_tbl2  <- tbl(conn,"receipt_englishsub")
 
@@ -60,8 +60,7 @@ dat$category2  <- iconv(dat$category2,from="utf-8",to="cp932")
 dat$product    <- iconv(dat$product,from="utf-8",to="cp932")
 
 ##
-
-write.csv(dat,"C:/R_dir/DAC/src/fundamentals/receipt_sample.csv")
-receipt <- read.csv("C:/R_dir/DAC/src/fundamentals/receipt_sample.csv")
+write.csv(dat,"C:/R_dir/DAC/data/receipt_sample.csv")
+receipt <- read.csv("C:/R_dir/DAC/data/receipt_sample.csv")
 receipt <- tbl_df(receipt)
 str(receipt)
