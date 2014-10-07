@@ -2,7 +2,7 @@
 ## Loyality growth/collapse
 
 ###########################################################################
-## dataset preparation ###################################################
+## 0.dataset preparation ###################################################
 receipt %>%
   filter(customer_code != "NA") %>%
   mutate(unique_prch = paste(yyyymm,store,regi_number,receipt_number,sep="_") ) %>%
@@ -53,7 +53,7 @@ fm_ts %>%
 
 fm_ts
 
-##################visualization ######################
+################## visualization ######################
 
 ## amount
 lim=c(0,20000)
@@ -64,10 +64,37 @@ q1 <- qplot(alpha=0.1,xlim=lim,ylim=lim,facets=store~.,size=10,
 
 q1 +  scale_colour_gradient(limits=c(0,50000),low="blue", high="red")
 
-## frequency
+## frequency : comparison 01 vs 06
 lim=c(0,40)
 q2 <- qplot(alpha=0.001,xlim=lim,ylim=lim,facets=store~.,
             data = fm_ts, x=freq01, y=freq06, colour=purchase_ttl,size=10,
             xlab="purchase freq in 2014.1 (#)",ylab="purchase freq in 2014.6 (#)")
 
-q2 +  scale_colour_gradient(limits=c(0,100000),low="blue", high="red")
+q2 +  scale_colour_gradient(limits=c(0,100000),low="blue", high="red")+
+      geom_hline(yintercept=10) + geom_vline(xintercept=10)
+
+attach(fm_ts)
+
+table(freq01<=10,freq06>10)
+table(freq01<=10,freq06>10,store)
+
+
+## histogram
+
+qplot(freq06/freq01,geom="histogram",binwidth=0.2,
+      xlim=c(0,5),fill=factor(freq01))
+
+
+####### what is the typlical behavior of loyal customer? #########
+
+q<-  qplot(purchase_ttl/freq_ttl,purchase_ttl,data=fm_ts,size=10,alpha=0.01,
+     colour=freq_ttl/6,xlab="Yen per purchase",
+     xlim=c(0,3000),ylim=c(0,100000)) +
+     scale_colour_gradient(low="blue",high="red")
+    
+q
+q + geom_hline(yintercept=25000) + geom_vline(xintercept=1000) 
+
+attach(fm_ts)
+table(purchase_ttl<25000,purchase_ttl/freq_ttl > 1000)
+table(purchase_ttl<25000,purchase_ttl/freq_ttl > 1000,store)
